@@ -1,3 +1,2 @@
-f=File.read("input.txt").chomp.split(",").map(&:to_i).reduce([0]*9){|c,n|c[n]+=1;c}
-80.times{f=f.each_with_index.reduce([0]*9){|c,(n,t)|t==0?c[6]+=n&&c[8]+=n:c[t-1]+=n;c}}
-p f.sum
+h=->{Hash.new(0)};f=IO.read("input.txt").scan(/\d+/).reduce(h[]){|c,n|c[n.to_i]+=1;c}
+80.times{r=h[];r[6]=r[8]=f[0];f.each{|t,n|t>0?r[t-1]+=n:0};f=r};p f.values.sum
