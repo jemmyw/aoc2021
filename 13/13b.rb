@@ -1,3 +1,4 @@
+require 'rmagick'
 lines = File.readlines('input.txt').map(&:chomp)
 
 folds =
@@ -44,27 +45,18 @@ def fold(grid, f)
   f[0] == 'x' ? foldx(grid, f[1].to_i) : foldy(grid, f[1].to_i)
 end
 
+@gc = 0
 def print_grid(grid)
-  output =
-    rotm90(
-        rot90(grid)
-          .select { |r| r.any?(&:itself) }
-          .yield_self do |g|
-            while g.first.size > 50
-              g = g.map { |r| r.each_slice(2).map(&:last) }
-            end
-            g
-          end,
-      )
-      .select { |r| r.any?(&:itself) }
-      .yield_self do |g|
-        g = g.map { |r| r.each_slice(2).map(&:last) } while g.first.size > 150
-        g
-      end
-      .map { |row| row.map { |c| c ? '#' : '.' }.join }
-  puts "\e[H\e[2J"
-  output.each { |o| puts o }
-  puts
+  img = Magick::Image.new(grid.first.size, grid.size)
+  grid.each_with_index do |row, ri|
+    row.each_with_index do |c, ci|
+      img.pixel_color(ci, ri, c ? 'white' : 'black')
+    end
+  end
+
+  img.scale!(2.0)
+  img.write("grid_#{@gc.to_s.rjust(3, '0')}.png")
+  @gc += 1
 end
 
 def count_dots(grid)
@@ -73,8 +65,8 @@ end
 
 while fold = folds.shift
   print_grid(grid)
-  sleep 1
   grid = fold(grid, fold)
+  puts @gc
 end
 
 print_grid(grid)
