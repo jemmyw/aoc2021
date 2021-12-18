@@ -117,19 +117,6 @@ def magnitude(n)
   end
 
   n
-
-  # n
-  #   .each_with_index
-  #   .reduce([]) do |acc, (v, idx)|
-  #     next [v[:v]] if acc.empty?
-  #     if n[idx - 1][:d] == v[:d] && acc.last.is_a?(Numeric)
-  #       acc[-1] = [acc[-1], v[:v]]
-  #     else
-  #       acc << v[:v]
-  #     end
-  #     acc
-  #   end
-  #   .reduce(0) { |acc, v| v.is_a?(Array) ? acc + v[0] * 3 + v[1] * 2 : acc + v }
 end
 
 def print(n)
